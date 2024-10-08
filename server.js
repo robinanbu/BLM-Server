@@ -3,7 +3,7 @@ const cors = require("cors");
 const dbConn = require("./config/db");
 require("dotenv").config();
 const bloodRoutes = require("./routes/blood.routes");
-const userRoute = require("./routes/userroute");
+const userRoute = require("./routes/user.route");
 const app = express();
 app.use(express.json());
 
@@ -14,7 +14,7 @@ app.use(
   })
 );
 
-// app.use("/api/v1/blood", bloodRoutes);
+app.use("/api/v1/blood", bloodRoutes);
 app.use("/api/v1/user", userRoute);
 
 const port = process.env.PORT || 3333;
