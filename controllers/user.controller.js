@@ -57,6 +57,7 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials." });
     }
 
+    console.log(email);
     const findUser = await Users.findOne({ email });
     if (!findUser) {
       return res.status(404).json({ message: "Invalid email!" });
