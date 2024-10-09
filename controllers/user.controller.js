@@ -14,31 +14,26 @@ const registerUser = async (req, res) => {
   try {
     const { name, email, password, phone, location, role } = req.body;
 
-    // Validate required fields
     if (!name || !email || !password || !role) {
       return res.status(400).json({ message: "All fields except phone and location are required!" });
     }
 
-    // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists!" });
     }
 
-    // Create a new user
     const newUser = new User({
       name,
       email,
-      password, // This will be hashed in the User model's pre-save hook
+      password,
       phone,
       location,
       role,
     });
 
-    // Save the user
     const savedUser = await newUser.save();
     
-    // Exclude password from the response for security
     savedUser.password = undefined;
 
     res.status(201).json(savedUser);
