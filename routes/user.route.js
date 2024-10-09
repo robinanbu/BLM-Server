@@ -8,6 +8,10 @@ const {
   deleteUser,
 } = require("../controllers/user.controller");
 
+// const test = () => {
+//   console.log("working")
+// }
+
 router.get("/all", getAllUsers);
 router.post("/register", registerUser);
 router.post("/login", loginUser);

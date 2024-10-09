@@ -1,3 +1,4 @@
+const User = require("../models/User");
 const Users = require("../models/User");
 
 const getAllUsers = async (req, res) => {
@@ -13,22 +14,40 @@ const registerUser = async (req, res) => {
   try {
     const { name, email, password, phone, location, role } = req.body;
 
-    if (!name || !email || !password || !phone || !location || !role) {
-      return res.status(400).json({ message: "All fields are required!" });
+    // Validate required fields
+    if (!name || !email || !password || !role) {
+      return res.status(400).json({ message: "All fields except phone and location are required!" });
     }
 
-    const findUser = await Users.findOne({ email });
-    if (findUser) {
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
       return res.status(400).json({ message: "Email already exists!" });
     }
 
-    const newUser = new Users(req.body);
+    // Create a new user
+    const newUser = new User({
+      name,
+      email,
+      password, // This will be hashed in the User model's pre-save hook
+      phone,
+      location,
+      role,
+    });
+
+    // Save the user
     const savedUser = await newUser.save();
+    
+    // Exclude password from the response for security
+    savedUser.password = undefined;
+
     res.status(201).json(savedUser);
   } catch (error) {
+    console.error(error); // Log the error for debugging
     res.status(500).json({ error: "Server error. Please try again later." });
   }
 };
+
 
 const loginUser = async (req, res) => {
   try {
