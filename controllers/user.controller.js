@@ -13,6 +13,7 @@ const getAllUsers = async (req, res) => {
 const registerUser = async (req, res) => {
   try {
     const { name, email, password, phone, location, role } = req.body;
+    // console.log("Request body:", req.body);
 
     if (!name || !email || !password || !role) {
       return res.status(400).json({ message: "All fields except phone and location are required!" });
@@ -20,7 +21,9 @@ const registerUser = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "Email already exists!" });
+      console.log(`Attempted registration with existing email: ${email}`);
+      return res.status(400).json({ message: "Email already exists!" });//this part
+
     }
 
     const newUser = new User({
