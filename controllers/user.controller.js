@@ -22,7 +22,7 @@ const registerUser = async (req, res) => {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       console.log(`Attempted registration with existing email: ${email}`);
-      return res.status(400).json({ message: "Email already exists!" });//this part
+      return res.status(400).json({ message: "Email already exists!" });
 
     }
 
@@ -58,13 +58,12 @@ const loginUser = async (req, res) => {
     console.log(email);
     const findUser = await Users.findOne({ email });
     if (!findUser) {
-      return res.status(404).json({ message: "Invalid email!" });
+      return res.status(404).json({ message: "Invalid email...!" });
     }
-
     if (findUser.password === password) {
       return res.status(200).json({ role: findUser.role });
     } else {
-      return res.status(400).json({ message: "Invalid password!" });
+      return res.status(401).json({ message: "Wrong password...!" });
     }
   } catch (error) {
     res.status(500).json({ error: "Server error. Please try again later." });
